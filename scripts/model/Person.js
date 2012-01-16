@@ -16,11 +16,6 @@ function(_, Backbone) {
     // A dummy initialization method
     initialize: function() {
       //TODO
-    },
-
-    clear: function() {
-      this.destroy();
-      this.view.remove();
     }
 
   });

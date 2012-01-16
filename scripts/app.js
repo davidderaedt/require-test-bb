@@ -15,8 +15,7 @@ function ($, _, Backbone, Person, contactCollec, contactListView, selectedContac
 
  	o.init = function (){
 
-	 	console.log("hello world");
-
+	 	console.log("Contact app initializing");
 
 	 	o.loadContactData();
 
@@ -28,12 +27,12 @@ function ($, _, Backbone, Person, contactCollec, contactListView, selectedContac
 		$.getJSON("ContactData.json", function (data){
 
 			$.each(data.items, function(index, item){
-
+				// ugly, not sure how to better do that
 				item.id = item.pid;
 				contactCollec.add(item);
 			});
 
-			console.log('contacts loaded');
+			console.log('All contacts loaded');
 
 			contactCollec.setSelection(contactCollec.at(0));
 
