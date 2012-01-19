@@ -18,7 +18,7 @@ function ($, _, Backbone, Person, ContactListModel, ContactListView, SelectedCon
 		console.log("Contact app initializing");
 
 		var model = new ContactListModel();
-
+		
 		new ContactListView({model:model});
 		new SelectedContactView({model:model});
 
