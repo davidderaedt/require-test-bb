@@ -2,10 +2,9 @@ define([
 "jquery",
 "underscore",
 "backbone",
-"model/Person",
-"model/contactCollec"
+"model/Person"
 ], 
-function ($, _, Backbone, Person, contactCollec) {
+function ($, _, Backbone, Person) {
 
 
 	var o=Backbone.View.extend({
@@ -16,38 +15,46 @@ function ($, _, Backbone, Person, contactCollec) {
 
 		initialize: function() {
 			
-			contactCollec.bind("selectionChanged", this.onselectionchange, this);
+			this.model.bind("selectionChanged", this.onselectionchange, this);
 
       		// "manual" binding since the "events" object doesnt work for some buttons
-      		$("#removeContactBt").bind("click", this.removeContactBtHandler);
-      		$("#saveContactBt").bind("click", this.saveContactBtHandler);
+      		$("#removeContactBt").on("click", null, this,  this.removeContactBtHandler);
+      		$("#saveContactBt").on("click", null, this, this.saveContactBtHandler);
 
     	},
 
+    	/*
+    	events:{
+    		"click #removeContactBt":"removeContactBtHandler",    		
+    		"click #saveContactBt":"saveContactBtHandler",
+    	},
+    	*/
 
     	onselectionchange :function(){
 
-    		this.contact =contactCollec.selection; 
-    		console.log("selection change");
+    		this.contact =this.model.selection; 
+    		console.log("selection changed to "+this.contact.get("firstname"));    		
     		this.render();
     	},  	
 
 
-		removeContactBtHandler: function (){
-
-			contactCollec.remove(contactCollec.selection);
-			contactCollec.setSelection(contactCollec.at(0));
+		removeContactBtHandler: function (evt){
+			
+			var view= evt.data;
+			view.model.collec.remove(view.model.selection);
+			view.model.setSelection(view.model.collec.at(0));
 		},
 
 
-		saveContactBtHandler:function (){
+		saveContactBtHandler:function (evt){
 			
+			var view= evt.data;
 			var contactData={
 				firstname:$("#firstnameInput").attr("value"), 
 				lastname:$("#lastnameInput").attr("value")
 			};
 
-			contactCollec.updateSelection(contactData);
+			view.model.updateSelection(contactData);
 		},
 
 
@@ -68,6 +75,6 @@ function ($, _, Backbone, Person, contactCollec) {
 
 	});
 
-	return new o;
+	return o;
 
 });

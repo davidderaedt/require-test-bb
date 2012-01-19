@@ -1,44 +1,43 @@
 define([
 "jquery",
 "underscore",
-"backbone",
-"model/contactCollec"
+"backbone"
 ], 
-function ($, _, Backbone, contactCollec) {
+function ($, _, Backbone) {
 
 
 	var o= Backbone.View.extend({
 		
 
-		el: $('#contacts'),
+		el: $('#contactPanel'),
 
 
-		initialize: function() {
+		initialize: function(){
 					
-      		contactCollec.bind('add', this.addContact, this);
-      		contactCollec.bind('remove', this.removeContact, this);   
-      		contactCollec.bind('selectionChanged', this.onModelSelectionChanged, this);         		
-      		contactCollec.bind('selectionUpdated', this.render, this);   
-      		   		
-      		// "manual" binding since the "events" object doesnt work for some buttons
-      		$("#createContactBt").bind('click', this.createContactBtClickHandler);         		
-      		$(".contactitem").live('click', this.onUISelect);   
- 
+      		this.model.collec.bind('add', this.addContact, this);
+      		this.model.collec.bind('remove', this.removeContact, this);   
+      		this.model.bind('selectionChanged', this.onModelSelectionChanged, this);         		
+      		this.model.bind('selectionUpdated', this.render, this);   		 
     	},
 
 
 		render:function(){
 
-			this.el.html("");
+			var ul = this.el.find("ul");
+			ul.html("");
 
-			var n = contactCollec.length;
+			var n = this.model.collec.length;
 
 			for (var i = 0; i < n; i++) {
-				var contact = contactCollec.at(i);
+				var contact = this.model.collec.at(i);
 				this.addContact(contact);
 			};
-		
+		},
 
+
+		events:{
+			"click .contactitem":"onUISelect",	
+			"click #createContactBt":"createContactBtClickHandler",	
 		},
 
 
@@ -47,7 +46,8 @@ function ($, _, Backbone, contactCollec) {
 			var contactElt = $(document.createElement('li'));
 	 		contactElt.html('<li class="contactitem" data-contactid="'+contact.id+'">'+contact.get("firstname")+" "+contact.get("lastname")+"</li>");
 
-	 		this.el.append(contactElt);
+	 		var ul = this.el.find("ul");
+	 		ul.append(contactElt);
 
 		},
 
@@ -60,23 +60,20 @@ function ($, _, Backbone, contactCollec) {
 
 
 	    onUISelect:function(evt){  
-	    	console.log("onUISelect");
+	 	    	
 	    	var elt = $(evt.target);
 
 			var contactId = elt.attr("data-contactid");
-			console.log(contactId);
+			var contact = this.model.collec.get(contactId);
 
-			var contact = contactCollec.get(contactId);
-			contactCollec.setSelection(contact);
-
-			console.log(contact.get("firstname")+ ' selected');	 
+			this.model.setSelection(contact);			
 
 	    },
 
 
 	    onModelSelectionChanged:function(){
 	    	
-	    	var elt = $('[data-contactid="'+contactCollec.selection.id+'"]');
+	    	var elt = $('[data-contactid="'+this.model.selection.id+'"]');
 			$(".selection").removeClass("selection");
 			elt.addClass("selection");	 
 	    },
@@ -85,8 +82,8 @@ function ($, _, Backbone, contactCollec) {
 		createContactBtClickHandler:function (evt){
 
 			var c={firstname:"f", lastname:"l", id:Math.floor(Math.random()*0xFFFFFF)};
-			contactCollec.add(c);
-			contactCollec.setSelection(contactCollec.at(contactCollec.length-1));
+			this.model.collec.add(c);
+			this.model.setSelection(this.model.collec.at(this.model.collec.length-1));
 
 		}
 
@@ -94,6 +91,6 @@ function ($, _, Backbone, contactCollec) {
 	});
 
 
-	return new o;
+	return o;
 
 });
