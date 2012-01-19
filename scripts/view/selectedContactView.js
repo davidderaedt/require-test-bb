@@ -1,13 +1,12 @@
 define([
 "jquery",
-"underscore",
 "backbone",
 "model/Person"
 ], 
-function ($, _, Backbone, Person) {
+function ($, Backbone, Person) {
 
 
-	var o=Backbone.View.extend({
+	var SelectedContactView = Backbone.View.extend({
 		
 
 		el: $('#selectedContact'),
@@ -40,8 +39,7 @@ function ($, _, Backbone, Person) {
 		},
 
 
-		saveContactBtHandler:function (evt){
-			
+		saveContactBtHandler:function (evt){			
 			
 			var contactData={
 				firstname:$("#firstnameInput").attr("value"), 
@@ -63,6 +61,6 @@ function ($, _, Backbone, Person) {
 
 	});
 
-	return o;
+	return SelectedContactView;
 
 });

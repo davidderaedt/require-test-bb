@@ -11,8 +11,17 @@ require.config({
 });
 
 
-require(["app"], function(app) {
+require([
+"model/contactListModel",
+"view/AppView"
+], 
 
-	app.init();
+function(ContactListModel, AppView) {
+
+	console.log("Contact app initializing");
+
+	var model = new ContactListModel();
+
+	var mainView = new AppView({model:model});
 
 });

@@ -1,12 +1,11 @@
 define([
 "jquery",
-"underscore",
 "backbone"
 ], 
-function ($, _, Backbone) {
+function ($, Backbone) {
 
 
-	var o= Backbone.View.extend({
+	var ContactListView = Backbone.View.extend({
 		
 
 		el: $('#contactPanel'),
@@ -91,6 +90,6 @@ function ($, _, Backbone) {
 	});
 
 
-	return o;
+	return ContactListView;
 
 });

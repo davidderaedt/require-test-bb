@@ -1,11 +1,10 @@
 define([
   'jquery',
-  'underscore',
   'backbone',
   'model/Person'
 ], 
 
-function($, _, Backbone, Person){
+function($, Backbone, Person){
 
 
   var ContactListModel=  Backbone.Model.extend({
